@@ -228,38 +228,38 @@ async def update_auditor_password(
     return {"detail": user_in}
 
 
-@router.put("/", response_model=Successful)
-async def update_auditor(
-    full_name: str = Body(None),
-    email: EmailStr = Body(None),
-    phone_number: str = Body(None),
-    current_user: auditor = Depends(deps.get_current_active_auditor),
-) -> Any:
-    """
-    Update a user.
-    """
-    user_in = AuditorUpdate(**current_user)
-    if email is not None:
-        if await auditor_repository.get_by_email(email=email):
-            raise HTTPException(
-                status_code=400,
-                detail="The user with this username already exists in the database.",
-            )
-        user_in.email = email
-    if phone_number is not None:
-        if await auditor_repository.get_by_phone(phone=phone_number):
-            raise HTTPException(
-                status_code=400,
-                detail="The user with this username already exists in the database.",
-            )
-        validate_phone_number(phone_number)
-        user_in.phone_number = phone_number
-    if full_name is not None:
-        user_in.full_name = full_name
+# @router.put("/", response_model=Successful)
+# async def update_auditor(
+#     full_name: str = Body(None),
+#     email: EmailStr = Body(None),
+#     phone_number: str = Body(None),
+#     current_user: auditor = Depends(deps.get_current_active_auditor),
+# ) -> Any:
+#     """
+#     Update a user.
+#     """
+#     user_in = AuditorUpdate(**current_user)
+#     if email is not None:
+#         if await auditor_repository.get_by_email(email=email):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="The user with this username already exists in the database.",
+#             )
+#         user_in.email = email
+#     if phone_number is not None:
+#         if await auditor_repository.get_by_phone(phone=phone_number):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="The user with this username already exists in the database.",
+#             )
+#         validate_phone_number(phone_number)
+#         user_in.phone_number = phone_number
+#     if full_name is not None:
+#         user_in.full_name = full_name
 
-    await auditor_repository.update(id=current_user.id, obj_in=user_in)
+#     await auditor_repository.update(id=current_user.id, obj_in=user_in)
 
-    return {"detail": "User updated successfully"}
+#     return {"detail": "User updated successfully"}
 
 
 @router.post("/profilePicture")
