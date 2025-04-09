@@ -1,0 +1,271 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fintech-crm-be
+  name: fintech-crm-be
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fintech-crm-be
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: fintech-crm-be
+    spec:
+      containers:
+        - image: techdomeacr.azurecr.io/fintech-crm-be:_BUILD__ID_
+          name: fintech-crm-be
+          imagePullPolicy: Always
+          resources: {}
+          ports:
+            - containerPort: 80
+          env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DATABASE_USER
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DB_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DATABASE_PASSWORD
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DB_PASSWORD
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DB_HOST
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DATABASE_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DB_PORT
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DATABASE_PORT
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DATABASE_NAME  
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: DB_NAME   
+            - name: CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: CONNECTION_STRING                  
+            - name: CONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: CONTAINER_NAME
+            - name: PROFILEPICTURECONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: PROFILEPICTURECONTAINER_NAME
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: KAFKA_GROUP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: KAFKA_GROUP_ID
+            - name: KAFKA_WEBSOCKET_GROUP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: KAFKA_WEBSOCKET_GROUP_ID
+            - name: TEXTLOCAL_SENDER
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: TEXTLOCAL_SENDER
+            - name: TEXTLOCAL_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: TEXTLOCAL_URL     
+            - name: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY 
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: SMTP_HOST
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: SMTP_USER
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: SMTP_PASSWORD
+            - name: EMAILS_FROM_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: EMAILS_FROM_EMAIL
+            - name: EMAILS_FROM_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: EMAILS_FROM_NAME
+            - name: EMAIL_RESET_TOKEN_EXPIRE_MINUTES
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: EMAIL_RESET_TOKEN_EXPIRE_MINUTES
+            - name: EMAIL_TEMPLATES_DIR
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: EMAIL_TEMPLATES_DIR
+            - name: EMAILS_ENABLED
+              valueFrom:
+                secretKeyRef:
+                 name: fintech-crm-be
+                 key: EMAILS_ENABLED
+            - name: SECRET_KEY
+              valueFrom:
+                  secretKeyRef:
+                    name: fintech-crm-be
+                    key: SECRET_KEY     
+            - name: TEXTLOCAL_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: TEXTLOCAL_KEY                    
+            - name: FRONTEND_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: FRONTEND_HOST
+            - name: SERVER_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: SERVER_HOST   
+            - name: STRAPI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: STRAPI_API_KEY
+            - name: SARAL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: SARAL_API_KEY
+            - name: BEEHIIV_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: BEEHIIV_API_KEY
+            - name: REFRESH_TOKEN_SECRET_KEY                            
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: REFRESH_TOKEN_SECRET_KEY
+            - name: STRAPI_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: STRAPI_API_URL
+            - name: STRAPI_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: STRAPI_API_TOKEN            
+            - name: CLIENT_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: CLIENT_HOST
+            - name: BEEHIIV_PUBLICATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: BEEHIIV_PUBLICATION_ID       
+            - name: REFRESH_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: REFRESH_SECRET_KEY
+            - name: AZURE_STORAGE_PUBLIC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: AZURE_STORAGE_PUBLIC_URL 
+            - name: CREDIT_REPORT_API_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: CREDIT_REPORT_API_ID
+            - name: CREDIT_REPORT_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: CREDIT_REPORT_API_TOKEN        
+            - name: ALOHAA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: ALOHAA_API_KEY
+            - name: ALOHAA_DID_NUMBER        
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: ALOHAA_DID_NUMBER
+            - name: ALOHAA_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fintech-crm-be
+                  key: ALOHAA_WEBHOOK_URL              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fintech-crm-be
+  labels:
+    run: fintech-crm-be
+spec:
+  type: ClusterIP
+  selector:
+    app: fintech-crm-be
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

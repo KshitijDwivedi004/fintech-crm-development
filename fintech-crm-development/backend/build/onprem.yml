@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: zerokaradmin-api
+  name: zerokaradmin-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zerokaradmin-api
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: zerokaradmin-api
+    spec:
+      containers:
+        - image: zerokar.azurecr.io/zerokaradminapi:_BUILD__ID_
+          name: zerokaradmin
+          imagePullPolicy: Always
+          resources: {}
+          ports:
+            - containerPort: 80
+          env:
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: DATABASE_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: DATABASE_PASSWORD
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: DATABASE_HOST
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: DATABASE_PORT
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: DATABASE_NAME
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: SECRET_KEY
+            - name: CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: CONNECTION_STRING
+            - name: CONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: CONTAINER_NAME
+            - name: PROFILEPICTURECONTAINER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: PROFILEPICTURECONTAINER_NAME
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: KAFKA_GROUP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: KAFKA_GROUP_ID
+            - name: KAFKA_WEBSOCKET_GROUP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: KAFKA_WEBSOCKET_GROUP_ID
+            - name: TEXTLOCAL_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: TEXTLOCAL_KEY
+            - name: TEXTLOCAL_SENDER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: TEXTLOCAL_SENDER
+            - name: TEXTLOCAL_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: TEXTLOCAL_URL
+            - name: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: dev-secret
+                  key: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY
+
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zerokaradmin-api
+  labels:
+    run: zerokaradmin-api
+spec:
+  type: ClusterIP
+  selector:
+    app: zerokaradmin-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

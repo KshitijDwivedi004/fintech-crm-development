@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    container_name: zerokar-admin
+    ports:
+      - 80:80
+    volumes:
+      - .:/code
+    env_file:
+      - .env

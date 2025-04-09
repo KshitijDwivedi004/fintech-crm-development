@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: whatsappbot
+  name: whatsappbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whatsappbot
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: whatsappbot
+    spec:
+      containers:
+      - image: techdomeacr.azurecr.io/whatsappbot:_BUILD__ID_
+        name: whatsappbot
+        imagePullPolicy: Always
+        resources: {}
+        ports:
+          - containerPort: 80
+        env:
+          - name: NUMBER_ID
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: NUMBER_ID
+          - name: CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: CONNECTION_STRING  
+          - name: WATOKEN
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: WATOKEN                              
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: TOKEN
+          - name: OPENAI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: OPENAI_API_KEY
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: DATABASE_URL
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: KAFKA_BOOTSTRAP_SERVERS
+          - name: KAFKA_GROUP_ID
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: KAFKA_GROUP_ID
+          - name: KAFKA_WEBSOCKET_GROUP_ID
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: KAFKA_WEBSOCKET_GROUP_ID                  
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: SECRET_KEY
+          - name: RAZORPAY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: RAZORPAY_API_KEY
+          - name: RAZORPAY_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: RAZORPAY_API_SECRET
+          - name: RAZORPAY_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: RAZORPAY_WEBHOOK_SECRET
+          - name: CALENDLY_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: CALENDLY_TOKEN                
+          - name: CALENDLY_SINGLE_USE_LINK
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: CALENDLY_SINGLE_USE_LINK
+          - name: CALENDLY_OWNER
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: CALENDLY_OWNER
+          - name: RAZORPAY_PAYMENT_LINK
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: RAZORPAY_PAYMENT_LINK
+          - name: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: AZURE_APPINSIGHTS_INSTRUMENTATIONKEY
+          - name: APP_ID
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: APP_ID
+          - name: WHATSAPP_BUSINESS_ID
+            valueFrom:
+              secretKeyRef:
+                name: whatsappbot-dev-secret
+                key: WHATSAPP_BUSINESS_ID      
+      
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: whatsappbot
+  labels:
+    run: whatsappbot
+spec:
+  type: ClusterIP
+  selector:
+    app: whatsappbot
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

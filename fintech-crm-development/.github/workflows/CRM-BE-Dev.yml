@@ -1,0 +1,67 @@
+name: CRM-BE-Dev
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - backend/**
+      - .github/workflows/CRM-BE-Dev.yml      
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: Azure/docker-login@v1
+        with:
+          login-server: techdomeacr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - run: |
+          cd backend
+          docker build -t techdomeacr.azurecr.io/fintech-crm-be:${{ github.run_number }} .
+          docker push techdomeacr.azurecr.io/fintech-crm-be:${{ github.run_number }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: richardrigutins/replace-in-files@v1
+        with:
+          files: "./backend/deployment/deployment.yml"
+          search-text: "_BUILD__ID_"
+          replacement-text: "${{ github.run_number }}"
+
+      - uses: azure/setup-kubectl@v2.0
+
+      - uses: Azure/k8s-set-context@v2
+        with:
+          kubeconfig: ${{ secrets.NEW_KUBE_CONFIG }}
+
+      - uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          namespace: "fintech-dev"
+          manifests: |
+            ./backend/deployment/deployment.yml
+
+  notify-status:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send Teams Notification
+        uses: neonidian/teams-notify-build-status@v3
+        with:
+          webhookUrl: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          message: |
+            🚀 **Build Status Update** 🚀
+            The workflow **Saral-CRM-BE-Dev** has completed with status: Build Status=**${{ needs.build.result }}**, Deploy Status=**${{ needs.deploy.result }}**.
+            👉 Check out the latest deployment here: [Development Deployment](https://saralcrm-api-dev.techdomeaks.com/)
+          titleBackgroundColor: "${{ job.status }}"
+        env:
+          SHOULD_DISPLAY_VIEW_COMMIT_BUTTON: true            

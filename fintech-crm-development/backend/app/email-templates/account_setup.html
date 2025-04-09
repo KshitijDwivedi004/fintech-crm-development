@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Setup - {{ project_name }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <div>
+        <h1>{{ project_name }} - Account Setup</h1>
+        <p>Hi {{ full_name }},</p>
+        <p>An account has been created for you on {{ project_name }}.</p>
+        <p>Please click the link below to set up your password and activate your account:</p>
+        <p><a href="{{ setup_link }}">Set Up Account</a></p>
+        <p>Or copy and paste this URL into your browser:</p>
+        <p>{{ setup_link }}</p>
+        <p>This link will expire in {{ valid_hours }} hours.</p>
+        <p>If you didn't request this account creation, please ignore this email.</p>
+        <p>Best regards,<br>{{ project_name }} Team</p>
+    </div>
+</body>
+</html>

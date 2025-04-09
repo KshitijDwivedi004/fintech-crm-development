@@ -1,0 +1,43 @@
+trigger:
+- main
+- development
+
+variables:
+  tag: '$(Build.BuildId)'
+
+jobs:
+  - job: PRValidation
+    steps:
+    - task: CommitMessageValidator@1
+      inputs:
+        regExPattern: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\.\-\p{Extended_Pictographic}]+\))?(!)?: ([\w \p{Extended_Pictographic}])+([\s\S]*)'
+        regExFlags: 'um'
+        allCommitsMustMatch: true
+        prMode: true
+        
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'ACR'
+        repository: 'zerokaradminapi'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: '$(tag)'
+
+    - task: CopyFiles@2
+      displayName: Copy build manifests
+      inputs:
+        Contents: 'build/onprem.yml' # Pull the build directory (React)
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish build manifests
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/build/onprem.yml'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'

@@ -1,0 +1,52 @@
+name: CRM-Chatbot-Dev
+
+on:
+  push:
+    branches:
+       - development
+    paths:
+      - chatbot/**
+      - .github/workflows/CRM-CB-Dev.yml      
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - uses: Azure/docker-login@v1
+        with:
+          login-server: techdomeacr.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - run: |
+          cd chatbot
+          docker build -t techdomeacr.azurecr.io/whatsappbot:${{ github.run_number }} .
+          docker push techdomeacr.azurecr.io/whatsappbot:${{ github.run_number }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: richardrigutins/replace-in-files@v1
+        with:
+          files: "./chatbot/build/dev.yml"
+          search-text: "_BUILD__ID_"
+          replacement-text: "${{ github.run_number }}"
+
+      - uses: azure/setup-kubectl@v2.0
+
+      - uses: Azure/k8s-set-context@v2
+        with:
+          kubeconfig: ${{ secrets.NEW_KUBE_CONFIG }}
+
+      - uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          namespace: "fintech-dev"
+          manifests: |
+             ./chatbot/build/dev.yml
+
+        
